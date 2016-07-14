@@ -1,5 +1,6 @@
 package com.deepblue.popwindowsdemo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +11,13 @@ import android.widget.PopupWindow;
  * Created by Administrator on 2016/7/14 0014.
  */
 public class PopWindow extends PopupWindow {
-    private Context context;
-    private DismissPop dismissPop;
+    private Activity context;
     private View mMenuView;
+    private PopWindow.OnDismissListener onDismissListener;
 
-    public PopWindow(int width, int height, Context context, DismissPop dismissPop) {
-        super(width, height);
+    public PopWindow(Activity context) {
+        super(100, 100);
         this.context = context;
-        this.dismissPop = dismissPop;
-        //
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.pop_layout, null);
         this.setContentView(mMenuView);
@@ -28,24 +27,14 @@ public class PopWindow extends PopupWindow {
         this.setFocusable(true);
     }
 
-    public PopWindow(Context context, DismissPop dismissPop) {
-        super(context);
-        this.context = context;
-        this.dismissPop = dismissPop;
-        //
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMenuView = inflater.inflate(R.layout.pop_layout, null);
-        this.setContentView(mMenuView);
-        //设置SelectPicPopupWindow弹出窗体的宽
-        this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        this.setFocusable(true);
+    public void setOnDismissListener(PopWindow.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
     }
 
     /**
      * pop消失接口
      */
-    public interface DismissPop {
-        void isDismiss(Boolean flag);
+    public interface OnDismissListener {
+        void onDismiss();
     }
 }
